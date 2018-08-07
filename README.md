@@ -3,7 +3,7 @@ MSA is a software that does a fit to electronic energies and gradients using a f
 
 An older version can be downloaded at https://github.com/Kee-Wang/PES-Fitting-MSA. This new 2.0 version adds the function to include ab initio gradients in the fitting.
 
-The detailed theory is discussed in the references listed at the end. More information can be found in the Tutorial.txt file and at https://scholarblogs.emory.edu/bowman/
+The detailed theory is discussed in the references listed at the end. More information can be found in the Tutorial.txt file and at https://scholarblogs.emory.edu/bowman/msa.
 
 # Prerequisites
 1. C++ and Fortran 90 compiler;
