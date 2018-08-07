@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+import subprocess
+import os
+import shlex
+def cl(command):
+    #ip::string, command line as string input
+    #op::string, return value is the output of command line
+    #Notice, each time when change directly, cl starts from currect directory.
+    #Use three \' if you want to input multiple line
+    arg = shlex.split(command)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    print output
+    return output
+
+a = raw_input('Warning! This will reset all files. The deletion is not reversable. Do you you want to proceed? (y or n)\n')
+if a == 'y':
+  cl('''rm pes_shell.*
+  rm gradient.*
+  rm basis.*
+  rm *.dat
+  rm Makefile
+  rm test.*
+  cd src
+  make clean
+  rm msa
+  rm MOL*
+  rm fit.f90
+  cd emsa
+  make clean''')
+
+print('Exiting')

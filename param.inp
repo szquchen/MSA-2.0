@@ -1,0 +1,15 @@
+# a (length-scale)    E0 (weight)
+       2.0               0.02
+
+# explanation
+# (1) length scale: the internuclear distances are transformed to Morse variables as
+#     yij = exp(-rij/a), and here a is the length-scale parameter. The recommended
+#     value is between 2.0 and 3.0 bohr.
+#
+# (2) weight: the user can assign a weight to each data point, based on its energy.
+#     The weight is given by wt=E0/(E0+dE), where dE is the energy relative to the
+#     minimum in hartree, and E0 is the parameter that the user could modify.
+#
+# The default values are:
+#  a = 2.d0 (bohr)
+#  E0 = 1e+10 (all the weights are essentially 1)
