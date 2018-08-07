@@ -11,9 +11,9 @@ The detailed theory is discussed in the references listed at the end. More infor
 3. LAPACK library.
 
 # Credits
-MSA code: Zhen Xie
-Gradient extension: Chen Qu
-Python script: Qingfeng (Kee) Wang
+MSA code: Zhen Xie\\
+Gradient extension: Chen Qu\\
+Python script: Qingfeng (Kee) Wang\\
 
 # References
 1. Xie, Z.; Bowman, J.M. Permutationally Invariant Polynomial Basis for Molecular Energy Surface Fitting via Monomial Symmetrization. J. Chem. Theory Comput. 2010, 6, 26-34.
