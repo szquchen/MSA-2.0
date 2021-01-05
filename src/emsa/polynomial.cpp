@@ -333,7 +333,7 @@ namespace POLY{
     for(vit=vb.begin();vit!=vb.end();vit++){
       if((*vit).has(seed)) return *vit;;
     }
-    return *vit;
+    return polynomial();
   }
   bool is_in(const monomial & m, const vector<monomial> & vm){
     vector<monomial>::const_iterator vit;
