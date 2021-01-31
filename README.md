@@ -21,3 +21,4 @@ Python script: Qingfeng (Kee) Wang
 # References
 1. Xie, Z.; Bowman, J.M. Permutationally Invariant Polynomial Basis for Molecular Energy Surface Fitting via Monomial Symmetrization. J. Chem. Theory Comput. 2010, 6, 26-34.
 2. Nandi, A.; Qu, C.; Bowman, J.M. An Assessment of the Effectiveness of Incorporating Gradients in Potential Energy Fitting Using Permutationally Invariant Polynomials. J. Chem. Theory Comput. (in preparation)
+3. XXX
