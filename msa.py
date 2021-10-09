@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import subprocess
 import os
 import shlex
@@ -10,12 +10,12 @@ def cl(command):
     arg = shlex.split(command)
     p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
-    print output
+    print(output)
     return output
 
-order = raw_input('Please input the maximum order of the polynomial: ')
-symmetry = raw_input('Please input the permutation symmetry of the molecule: ')
-train_x = raw_input('Please input the name of the data file: ')
+order = input('Please input the maximum order of the polynomial: ')
+symmetry = input('Please input the permutation symmetry of the molecule: ')
+train_x = input('Please input the name of the data file: ')
 arg = order +' '+ symmetry
 
 print("")
@@ -41,8 +41,8 @@ for line in f:
 nconfig = nol/(natom+2)
 f.close()
 print('1. Input file info:')
-print('Number of atoms is : ' + str (natom))
-print('Number of configurations is: '+str(nconfig)+'\n')
+print(('Number of atoms is : ' + str (natom)))
+print(('Number of configurations is: '+str(nconfig)+'\n'))
 
 f = open('./src/basis.f90')
 nol=1 #Num of lines in file
@@ -58,17 +58,17 @@ for line in f:
 f.close()
 
 print('2. Polynomial info:')
-print('Given polynomial order: '+ order)
-print('Given symmetry: '+ symmetry)
-print('Number of coefficients is: ' + str(ncoeff) +'\n')
+print(('Given polynomial order: '+ order))
+print(('Given symmetry: '+ symmetry))
+print(('Number of coefficients is: ' + str(ncoeff) +'\n'))
 
-ans = raw_input('Would you like to continue? y/n \n')
+ans = input('Would you like to continue? y/n \n')
 if ans == 'n' or ans == "N":
     print('Fitting program terminated')
     quit()
 
 print("")
-ans = raw_input(
+ans = input(
 '''Do you want to include energy gradient (negative force) in the fitting? y/n
 ''')
 if ans == 'y' or ans == 'Y':
@@ -77,7 +77,7 @@ else:
     havegd = ".false."
 
 print("")
-ans = raw_input(
+ans = input(
 '''If you would like to set additional parameters, please specify the file for
 these additional parameters. Otherwise enter "n" to use the default:
 ''')
