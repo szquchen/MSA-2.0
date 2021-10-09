@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import subprocess
 import os
 import shlex
@@ -10,10 +10,10 @@ def cl(command):
     arg = shlex.split(command)
     p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
     (output, err) = p.communicate()
-    print output
+    print(output)
     return output
 
-a = raw_input('Warning! This will reset all files. The deletion is not reversable. Do you you want to proceed? (y or n)\n')
+a = input('Warning! This will reset all files. The deletion is not reversable. Do you you want to proceed? (y or n)\n')
 if a == 'y':
   cl('''rm pes_shell.*
   rm gradient.*
