@@ -28,8 +28,8 @@ make
 cp msa ../
 cd ../
 ./msa '''+ arg +  '''
-./postemsa.pl ''' + arg + '''
-./derivative.pl ''' + arg
+perl postemsa.pl ''' + arg + '''
+perl derivative.pl ''' + arg
 )
 
 f = open(train_x)
