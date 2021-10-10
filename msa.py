@@ -8,7 +8,7 @@ def cl(command):
     #Notice, each time when change directly, cl starts from currect directory.
     #Use three \' if you want to input multiple line
     arg = shlex.split(command)
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
     (output, err) = p.communicate()
     print(output)
     return output
