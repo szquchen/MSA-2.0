@@ -7,7 +7,7 @@ The detailed theory is discussed in the references listed at the end. More infor
 
 # Prerequisites
 1. C++ and Fortran 90 compiler;
-2. Python and Perl;
+2. Python3 and Perl;
 3. LAPACK library.
 
 # Credits
