@@ -214,6 +214,7 @@ implicit none
 
   write(12,"(A)") "#   V_ai (hartree)     V_PES (hartree)     Diff. (cm-1)"
   rmse=0.d0
+  wrmse=0.d0
   do m=1,ne
      v_out(m)=emsav(yij(m,:),coeff)
      write (12,'(2F15.8,F12.2)') v(m),v_out(m),abs(v(m)-v_out(m))*aucm
@@ -228,6 +229,7 @@ implicit none
   if (havegrad) then
      write(13,*) "#  Grad_ai (h/bohr)   Grad_pes (h/bohr)   Diff (h/bohr)"
      grmse=0.d0
+     wgrmse=0.d0
      do m=1,ne
         write(13,*) natm
         call evmono(yij(m,:),mono)
