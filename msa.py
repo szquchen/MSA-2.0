@@ -103,7 +103,7 @@ use gradient
 implicit none
 
   external dgelss
-  character :: symb
+  character (len=2) :: symb
   logical :: havegrad
   real :: work(150000), dr(3), vmin, a0
   real :: rmse, grmse, wrmse, wgrmse, dwt
@@ -396,7 +396,7 @@ implicit none
 
   real :: v, v0
   logical :: havegrad
-  character (len=1) :: symb
+  character (len=2) :: symb
   integer :: i, natm
   real, dimension (:,:), allocatable :: xyz
   real, dimension (:), allocatable :: grad, g0
