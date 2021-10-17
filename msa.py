@@ -274,7 +274,7 @@ cl('''cp ./src/fit.x ./
 rm fit.x
 mv ./src/basis.f90 ./
 mv ./src/gradient.f90 ./
-cp ./src/Makefile ./ '''
+cp -p ./src/Makefile ./ '''
 )
 
 g = open('pes_shell.f90','w')
