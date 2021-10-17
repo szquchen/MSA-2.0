@@ -206,6 +206,9 @@ implicit none
   else
      call dgelss(ne,ncoeff,1,A,ne,b,ne,s,1.0d-11,rank,work,150000,info)
   end if
+  if (info .ne. 0) then
+      stop 'LAPACK DGELSS solver failure'
+  endif
 
   coeff(:)=b(1:ncoeff)
   do i=1,ncoeff
