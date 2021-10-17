@@ -108,7 +108,7 @@ implicit none
   real :: work(150000), dr(3), vmin, a0
   real :: rmse, grmse, wrmse, wgrmse, dwt
   integer :: i, j, k, m, info, rank
-  integer :: ne, ng, ntot, ndis, ncoeff, natm
+  integer :: ne, ntot, ndis, ncoeff, natm
   real,allocatable::xyz(:,:,:),v(:),g(:,:,:),wt(:)
   real,allocatable::yij(:,:),drdx(:,:,:),mono(:),poly(:),dvp(:)
   real,allocatable::A(:,:),b(:),coeff(:),s(:)
@@ -397,11 +397,10 @@ implicit none
   real :: v, v0
   logical :: havegrad
   character (len=1) :: symb
-  integer :: i, j, natm, numero
+  integer :: i, natm
   real, dimension (:,:), allocatable :: xyz
   real, dimension (:), allocatable :: grad, g0
   character(len=32)::fname, bname
-  real,parameter::aucm = 219474.63
   real,parameter::auang= 0.5291772083d0
 
   havegrad = '''+havegd+'''
