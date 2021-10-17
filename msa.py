@@ -160,7 +160,7 @@ implicit none
   vmin = minval(v)
 
   yij=0.d0
-  if (havegrad .eq. .true.) drdx=0.d0
+  if (havegrad .eqv. .true.) drdx=0.d0
   do m=1,ne
      k = 1
      do i=1,natm-1
@@ -169,7 +169,7 @@ implicit none
            dr=xyz(m,i,:)-xyz(m,j,:)
            yij(m,k)=sqrt(dot_product(dr,dr))
 
-           if (havegrad .eq. .true.) then
+           if (havegrad .eqv. .true.) then
               drdx(m,3*i-2:3*i,k) = dr(:)/yij(m,k)
               drdx(m,3*j-2:3*j,k) = -drdx(m,3*i-2:3*i,k)
            end if
