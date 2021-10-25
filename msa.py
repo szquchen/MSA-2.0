@@ -103,12 +103,12 @@ use gradient
 implicit none
 
   external dgelss
-  character :: symb
+  character (len=2) :: symb
   logical :: havegrad
   real :: work(150000), dr(3), vmin, a0
   real :: rmse, grmse, wrmse, wgrmse, dwt
   integer :: i, j, k, m, info, rank
-  integer :: ne, ng, ntot, ndis, ncoeff, natm
+  integer :: ne, ntot, ndis, ncoeff, natm
   real,allocatable::xyz(:,:,:),v(:),g(:,:,:),wt(:)
   real,allocatable::yij(:,:),drdx(:,:,:),mono(:),poly(:),dvp(:)
   real,allocatable::A(:,:),b(:),coeff(:),s(:)
@@ -160,7 +160,7 @@ implicit none
   vmin = minval(v)
 
   yij=0.d0
-  if (havegrad .eq. .true.) drdx=0.d0
+  if (havegrad .eqv. .true.) drdx=0.d0
   do m=1,ne
      k = 1
      do i=1,natm-1
@@ -169,7 +169,7 @@ implicit none
            dr=xyz(m,i,:)-xyz(m,j,:)
            yij(m,k)=sqrt(dot_product(dr,dr))
 
-           if (havegrad .eq. .true.) then
+           if (havegrad .eqv. .true.) then
               drdx(m,3*i-2:3*i,k) = dr(:)/yij(m,k)
               drdx(m,3*j-2:3*j,k) = -drdx(m,3*i-2:3*i,k)
            end if
@@ -206,6 +206,9 @@ implicit none
   else
      call dgelss(ne,ncoeff,1,A,ne,b,ne,s,1.0d-11,rank,work,150000,info)
   end if
+  if (info .ne. 0) then
+      stop 'LAPACK DGELSS solver failure'
+  endif
 
   coeff(:)=b(1:ncoeff)
   do i=1,ncoeff
@@ -214,6 +217,7 @@ implicit none
 
   write(12,"(A)") "#   V_ai (hartree)     V_PES (hartree)     Diff. (cm-1)"
   rmse=0.d0
+  wrmse=0.d0
   do m=1,ne
      v_out(m)=emsav(yij(m,:),coeff)
      write (12,'(2F15.8,F12.2)') v(m),v_out(m),abs(v(m)-v_out(m))*aucm
@@ -228,6 +232,7 @@ implicit none
   if (havegrad) then
      write(13,*) "#  Grad_ai (h/bohr)   Grad_pes (h/bohr)   Diff (h/bohr)"
      grmse=0.d0
+     wgrmse=0.d0
      do m=1,ne
         write(13,*) natm
         call evmono(yij(m,:),mono)
@@ -269,7 +274,7 @@ cl('''cp ./src/fit.x ./
 rm fit.x
 mv ./src/basis.f90 ./
 mv ./src/gradient.f90 ./
-cp ./src/Makefile ./ '''
+cp -p ./src/Makefile ./ '''
 )
 
 g = open('pes_shell.f90','w')
@@ -391,12 +396,11 @@ implicit none
 
   real :: v, v0
   logical :: havegrad
-  character (len=1) :: symb
-  integer :: i, j, natm, numero
+  character (len=2) :: symb
+  integer :: i, natm
   real, dimension (:,:), allocatable :: xyz
   real, dimension (:), allocatable :: grad, g0
   character(len=32)::fname, bname
-  real,parameter::aucm = 219474.63
   real,parameter::auang= 0.5291772083d0
 
   havegrad = '''+havegd+'''
