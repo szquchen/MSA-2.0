@@ -25,19 +25,23 @@ train_x = input('Please input the name of the data file: ')
 arg = order +' '+ symmetry
 
 print("")
-print("Generating the fitting bases... (This might take time) \n")
-
+print("Compiling the fitting base generator...")
 cl('''
 cd src
 cd emsa
 make
 cp msa ../ '''
 )
+
+print("Generating the fitting bases...")
+print("This might take hours for larger systems, especially if they have a lot of permutational symmetry.")
 cl('''
 cd src
 ./msa '''+ arg +  '''
 '''
 )
+
+print("Generating the Fortran source code from the fitting bases...")
 cl('''
 cd src
 perl postemsa.pl ''' + arg + '''
