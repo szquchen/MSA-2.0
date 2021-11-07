@@ -21,7 +21,6 @@ def cl(command):
 
 order = input('Please input the maximum order of the polynomial: ')
 symmetry = input('Please input the permutation symmetry of the molecule: ')
-train_x = input('Please input the name of the data file: ')
 arg = order +' '+ symmetry
 
 print("")
@@ -47,6 +46,8 @@ cd src
 perl postemsa.pl ''' + arg + '''
 perl derivative.pl ''' + arg
 )
+
+train_x = input('Please input the name of the data file: ')
 
 f = open(train_x)
 nol = 0
