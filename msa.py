@@ -108,11 +108,13 @@ else:
     a0 = line.split()[0]
     wt = line.split()[1]
 
+print("Splicing values into gradient.f90...")
 cl('''cd src
 sed 's/a = 2.0d0/a = ''' + a0 + '''/g' gradient.f90 > temp.f90
 mv temp.f90 gradient.f90
 ''')
 
+print("Writing src/fit.f90...")
 g = open('./src/fit.f90','w')
 g.write('''program fit
 use basis
@@ -279,6 +281,8 @@ implicit none
 end program
 ''')
 g.close() #Must close the file handle if you want to compile this file.
+
+print("Compiling fit.f90...")
 cl('''
 cd src
 make'''
@@ -294,6 +298,7 @@ mv ./src/gradient.f90 ./
 cp -p ./src/Makefile ./ '''
 )
 
+print("Writing pes_shell.f90...")
 g = open('pes_shell.f90','w')
 g.write('''module pes_shell
 use basis
@@ -405,6 +410,7 @@ end module pes_shell
 ''')
 g.close()
 
+print("Writing test.f90...")
 g = open("test.f90","w")
 g.write('''
 program main
@@ -466,6 +472,7 @@ end program
 ''')
 g.close()
 
+print("Compiling test.f90...")
 cl('''make test.x
 cp ./src/test.xyz ./'''
 )
