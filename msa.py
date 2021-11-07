@@ -31,9 +31,15 @@ cl('''
 cd src
 cd emsa
 make
-cp msa ../
-cd ../
+cp msa ../ '''
+)
+cl('''
+cd src
 ./msa '''+ arg +  '''
+'''
+)
+cl('''
+cd src
 perl postemsa.pl ''' + arg + '''
 perl derivative.pl ''' + arg
 )
