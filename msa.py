@@ -25,27 +25,39 @@ arg = order +' '+ symmetry
 
 print("")
 print("Compiling the fitting base generator...")
-cl('''
+returncode = cl('''
 cd src
 cd emsa
 make
 cp msa ../ '''
 )
+if returncode != 0:
+    print("Failed to compile fitting base generator!\n")
+    print("Please check the output above, maybe try running reset, and try again!\n")
+    quit()
 
 print("Generating the fitting bases...")
 print("This might take hours for larger systems, especially if they have a lot of permutational symmetry.")
-cl('''
+returncode = cl('''
 cd src
 ./msa '''+ arg +  '''
 '''
 )
+if returncode != 0:
+    print("Failed to generate fitting bases!\n")
+    print("Please check the output above, maybe try running reset, and try again!\n")
+    quit()
 
 print("Generating the Fortran source code from the fitting bases...")
-cl('''
+returncode = cl('''
 cd src
 perl postemsa.pl ''' + arg + '''
 perl derivative.pl ''' + arg
 )
+if returncode != 0:
+    print("Failed to generate Fortran source code!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 train_x = input('Please input the name of the fitting set file: ')
 
@@ -109,10 +121,14 @@ else:
     wt = line.split()[1]
 
 print("Splicing values into gradient.f90...")
-cl('''cd src
+returncode = cl('''cd src
 sed 's/a = 2.0d0/a = ''' + a0 + '''/g' gradient.f90 > temp.f90
 mv temp.f90 gradient.f90
 ''')
+if returncode != 0:
+    print("Failed to splice values into gradient.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 print("Writing src/fit.f90...")
 g = open('./src/fit.f90','w')
@@ -283,20 +299,27 @@ end program
 g.close() #Must close the file handle if you want to compile this file.
 
 print("Compiling fit.f90...")
-cl('''
+returncode = cl('''
 cd src
 make'''
 )
+if returncode != 0:
+    print("Failed to compile src/fit.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 print("Fitting... (This might take a while) \n")
-
-cl('''cp ./src/fit.x ./
+returncode = cl('''cp ./src/fit.x ./
 ./fit.x '''+train_x+'''
 rm fit.x
 mv ./src/basis.f90 ./
 mv ./src/gradient.f90 ./
 cp -p ./src/Makefile ./ '''
 )
+if returncode != 0:
+    print("Failed to run fit.x!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 print("Writing pes_shell.f90...")
 g = open('pes_shell.f90','w')
@@ -473,9 +496,13 @@ end program
 g.close()
 
 print("Compiling test.f90...")
-cl('''make test.x
+returncode = cl('''make test.x
 cp ./src/test.xyz ./'''
 )
+if returncode != 0:
+    print("Failed to compile test.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 print ('4. In order to run the test program, use command:')
 print ('./test.x test.xyz \n')
