@@ -47,7 +47,7 @@ perl postemsa.pl ''' + arg + '''
 perl derivative.pl ''' + arg
 )
 
-train_x = input('Please input the name of the data file: ')
+train_x = input('Please input the name of the fitting set file: ')
 
 f = open(train_x)
 nol = 0
@@ -288,7 +288,7 @@ cd src
 make'''
 )
 
-print("Fitting... (This might take time) \n")
+print("Fitting... (This might take a while) \n")
 
 cl('''cp ./src/fit.x ./
 ./fit.x '''+train_x+'''
