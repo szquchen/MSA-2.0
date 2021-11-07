@@ -7,7 +7,6 @@ def cl(command):
     #op::string, return value is the output of command line
     #Notice, each time when cl is called, cl starts from current directory.
     #Use three \' if you want to input multiple lines
-    arg = shlex.split(command)
     p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
     (output, err) = p.communicate()
     print(output)
