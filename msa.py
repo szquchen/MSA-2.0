@@ -4,7 +4,7 @@ import os
 import shlex
 def cl(command):
     #ip::string, command line as string input
-    #op::string, return value is the output of command line
+    #op::integer, return value is the return value of the command line
     #Notice, each time when cl is called, cl starts from current directory.
     #Use three \' if you want to input multiple lines
     #String emptiness detection is taken from https://stackoverflow.com/a/55747410
@@ -15,7 +15,9 @@ def cl(command):
     if (not "".__eq__(stderr_str)) and (not stderr_str.isspace()):
         print('The command has also written to stderr:')
         print(stderr_str)
-    return stdout_str
+    if p.returncode != 0:
+        print((command + ' returned with return code: '+ str(p.returncode)))
+    return p.returncode
 
 order = input('Please input the maximum order of the polynomial: ')
 symmetry = input('Please input the permutation symmetry of the molecule: ')
