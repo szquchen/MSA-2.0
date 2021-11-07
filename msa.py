@@ -7,10 +7,14 @@ def cl(command):
     #op::string, return value is the output of command line
     #Notice, each time when cl is called, cl starts from current directory.
     #Use three \' if you want to input multiple lines
+    #String emptiness detection is taken from https://stackoverflow.com/a/55747410
     p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, universal_newlines=True)
     (stdout_str, stderr_str) = p.communicate()
-    print(stdout_str)
-    print(stderr_str)
+    if (not "".__eq__(stdout_str)) and (not stdout_str.isspace()):
+        print(stdout_str)
+    if (not "".__eq__(stderr_str)) and (not stderr_str.isspace()):
+        print('The command has also written to stderr:')
+        print(stderr_str)
     return stdout_str
 
 order = input('Please input the maximum order of the polynomial: ')
