@@ -227,7 +227,7 @@ implicit none
   rmse=sqrt(rmse/dble(ne))
   wrmse=sqrt(wrmse/dble(ne))
   write(*,"(A,F9.2,A)") 'Overall RMSE for energy:', rmse*aucm, ' cm-1'
-  write(*,"(A,F9.2,A)") "wrighted RMSE for energy:", wrmse*aucm, " cm-1"
+  write(*,"(A,F9.2,A)") "weighted RMSE for energy:", wrmse*aucm, " cm-1"
 
   if (havegrad) then
      write(13,*) "#  Grad_ai (h/bohr)   Grad_pes (h/bohr)   Diff (h/bohr)"
