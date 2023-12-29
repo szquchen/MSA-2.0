@@ -4,33 +4,62 @@ import os
 import shlex
 def cl(command):
     #ip::string, command line as string input
-    #op::string, return value is the output of command line
-    #Notice, each time when change directly, cl starts from currect directory.
-    #Use three \' if you want to input multiple line
-    arg = shlex.split(command)
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True, universal_newlines=True)
-    (output, err) = p.communicate()
-    print(output)
-    return output
+    #op::integer, return value is the return value of the command line
+    #Notice, each time when cl is called, cl starts from current directory.
+    #Use three \' if you want to input multiple lines
+    #String emptiness detection is taken from https://stackoverflow.com/a/55747410
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, universal_newlines=True)
+    (stdout_str, stderr_str) = p.communicate()
+    if (not "".__eq__(stdout_str)) and (not stdout_str.isspace()):
+        print(stdout_str)
+    if (not "".__eq__(stderr_str)) and (not stderr_str.isspace()):
+        print('The command has also written to stderr:')
+        print(stderr_str)
+    if p.returncode != 0:
+        print((command + ' returned with return code: '+ str(p.returncode)))
+    return p.returncode
 
 order = input('Please input the maximum order of the polynomial: ')
 symmetry = input('Please input the permutation symmetry of the molecule: ')
-train_x = input('Please input the name of the data file: ')
 arg = order +' '+ symmetry
 
 print("")
-print("Generating the fitting bases... (This might take time) \n")
-
-cl('''
+print("Compiling the fitting base generator...")
+returncode = cl('''
 cd src
 cd emsa
 make
-cp msa ../
-cd ../
+cp msa ../ '''
+)
+if returncode != 0:
+    print("Failed to compile fitting base generator!\n")
+    print("Please check the output above, maybe try running reset, and try again!\n")
+    quit()
+
+print("Generating the fitting bases...")
+print("This might take hours for larger systems, especially if they have a lot of permutational symmetry.")
+returncode = cl('''
+cd src
 ./msa '''+ arg +  '''
+'''
+)
+if returncode != 0:
+    print("Failed to generate fitting bases!\n")
+    print("Please check the output above, maybe try running reset, and try again!\n")
+    quit()
+
+print("Generating the Fortran source code from the fitting bases...")
+returncode = cl('''
+cd src
 perl postemsa.pl ''' + arg + '''
 perl derivative.pl ''' + arg
 )
+if returncode != 0:
+    print("Failed to generate Fortran source code!\n")
+    print("Please check the output above and try again!\n")
+    quit()
+
+train_x = input('Please input the name of the fitting set file: ')
 
 f = open(train_x)
 nol = 0
@@ -91,11 +120,17 @@ else:
     a0 = line.split()[0]
     wt = line.split()[1]
 
-cl('''cd src
+print("Splicing values into gradient.f90...")
+returncode = cl('''cd src
 sed 's/a = 2.0d0/a = ''' + a0 + '''/g' gradient.f90 > temp.f90
 mv temp.f90 gradient.f90
 ''')
+if returncode != 0:
+    print("Failed to splice values into gradient.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
+print("Writing src/fit.f90...")
 g = open('./src/fit.f90','w')
 g.write('''program fit
 use basis
@@ -262,21 +297,31 @@ implicit none
 end program
 ''')
 g.close() #Must close the file handle if you want to compile this file.
-cl('''
+
+print("Compiling fit.f90...")
+returncode = cl('''
 cd src
 make'''
 )
+if returncode != 0:
+    print("Failed to compile src/fit.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
-print("Fitting... (This might take time) \n")
-
-cl('''cp ./src/fit.x ./
+print("Fitting... (This might take a while) \n")
+returncode = cl('''cp ./src/fit.x ./
 ./fit.x '''+train_x+'''
 rm fit.x
 mv ./src/basis.f90 ./
 mv ./src/gradient.f90 ./
 cp -p ./src/Makefile ./ '''
 )
+if returncode != 0:
+    print("Failed to run fit.x!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
+print("Writing pes_shell.f90...")
 g = open('pes_shell.f90','w')
 g.write('''module pes_shell
 use basis
@@ -388,6 +433,7 @@ end module pes_shell
 ''')
 g.close()
 
+print("Writing test.f90...")
 g = open("test.f90","w")
 g.write('''
 program main
@@ -449,9 +495,14 @@ end program
 ''')
 g.close()
 
-cl('''make test.x
+print("Compiling test.f90...")
+returncode = cl('''make test.x
 cp ./src/test.xyz ./'''
 )
+if returncode != 0:
+    print("Failed to compile test.f90!\n")
+    print("Please check the output above and try again!\n")
+    quit()
 
 print ('4. In order to run the test program, use command:')
 print ('./test.x test.xyz \n')
