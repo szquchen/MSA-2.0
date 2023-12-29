@@ -1,6 +1,6 @@
 # using ifort and MKL
 FC = ifort -r8 -O
-LIBS = -qmkl=sequential
+LIBS = -qmkl=sequential # for older versions of ifort compiler, you may need to use -mkl=sequential
 
 # using gfortran and MKL
 #FC = gfortran -fdefault-real-8 -O
