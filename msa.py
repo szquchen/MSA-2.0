@@ -48,7 +48,8 @@ if returncode != 0:
     print("Please check the output above, maybe try running reset, and try again!\n")
     quit()
 
-print("Generating the Fortran source code from the fitting bases...")
+
+print("Generating the Fortran source code from the fitting bases...\n")
 returncode = cl('''
 cd src
 perl postemsa.pl ''' + arg + '''
@@ -58,20 +59,6 @@ if returncode != 0:
     print("Failed to generate Fortran source code!\n")
     print("Please check the output above and try again!\n")
     quit()
-
-train_x = input('Please input the name of the fitting set file: ')
-
-f = open(train_x)
-nol = 0
-for line in f:
-  nol=nol+1
-  if nol==1:
-    natom=int(line)
-nconfig = nol/(natom+2)
-f.close()
-print('1. Input file info:')
-print(('Number of atoms is : ' + str (natom)))
-print(('Number of configurations is: '+str(nconfig)+'\n'))
 
 f = open('./src/basis.f90')
 nol=1 #Num of lines in file
@@ -86,16 +73,30 @@ for line in f:
   nol=nol+1
 f.close()
 
-print('2. Polynomial info:')
+print('1. Polynomial info:')
 print(('Given polynomial order: '+ order))
 print(('Given symmetry: '+ symmetry))
 print(('Number of coefficients is: ' + str(ncoeff) +'\n'))
 
-ans = input('Would you like to continue? y/n \n')
+ans = input('Fortran code for PIPs has been generated. Would you like to proceed to the fitting? y/n\n')
 if ans == 'n' or ans == "N":
-    print('Fitting program terminated')
+    print('Program terminated after generating the PIPs. You can find them in src/basis.f90\n')
     quit()
 
+train_x = input('Please input the name of the fitting set file: ')
+
+f = open(train_x)
+nol = 0
+for line in f:
+  nol=nol+1
+  if nol==1:
+    natom=int(line)
+nconfig = nol/(natom+2)
+f.close()
+print("")
+print('2. Input file info:')
+print('Number of atoms is : ' + str(natom))
+print('Number of configurations is: '+str(nconfig))
 print("")
 ans = input(
 '''Do you want to include energy gradient (negative force) in the fitting? y/n
@@ -257,10 +258,10 @@ implicit none
      v_out(m)=emsav(yij(m,:),coeff)
      write (12,'(2F15.8,F12.2)') v(m),v_out(m),abs(v(m)-v_out(m))*aucm
      rmse=rmse+(v(m)-v_out(m))**2
-     wrmse=wrmse+(wt(m)*(v(m)-v_out(m)))**2
+     wrmse=wrmse+wt(m)*(v(m)-v_out(m))**2
   end do
   rmse=sqrt(rmse/dble(ne))
-  wrmse=sqrt(wrmse/dble(ne))
+  wrmse=sqrt(wrmse/sum(wt))
   write(*,"(A,F9.2,A)") 'Overall RMSE for energy:', rmse*aucm, ' cm-1'
   write(*,"(A,F9.2,A)") "wrighted RMSE for energy:", wrmse*aucm, " cm-1"
 
@@ -278,13 +279,13 @@ implicit none
            g_out(m,k,j)=demsav(drdx(m,:,:),coeff,mono,poly,i)
            write(13,'(3F15.8)')g(m,k,j),g_out(m,k,j),abs(g(m,k,j)-g_out(m,k,j))
            grmse=grmse+(g(m,k,j)-g_out(m,k,j))**2
-           wgrmse=wgrmse+(wt(m)*(g(m,k,j)-g_out(m,k,j)))**2
+           wgrmse=wgrmse+wt(m)*(g(m,k,j)-g_out(m,k,j))**2
         end do
      end do
      grmse=sqrt(grmse/dble(3*natm*ne))
-     wgrmse=sqrt(wgrmse/dble(3*natm*ne))
+     wgrmse=sqrt(wgrmse/dble(3*natm*sum(wt)))
      write(*,"(A,F13.7,A)") 'Overall RMSE for gradient:', grmse, ' hartree/bohr'
-     write(*,"(A,F13.7,A)") "Weighted RMSE for gradient:",wgrmse," hartree/bohr"
+     write(*,"(A,F13.7,A)") "Weighted RMSE for gradient:", wgrmse," hartree/bohr"
   end if
 
   deallocate(v,v_out,coeff,s,yij,poly,A,b)

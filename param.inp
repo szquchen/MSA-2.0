@@ -1,5 +1,5 @@
 # a (length-scale)    E0 (weight)
-       2.0               0.02
+       2.0               0.04
 
 # explanation
 # (1) length scale: the internuclear distances are transformed to Morse variables as

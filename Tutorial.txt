@@ -1,20 +1,23 @@
-This is the MSA software that fits the potential energy surface using
-fitting bases that are invariant with respect to permutations of like
-atoms. The detailed theory is described in the paper
-Xie, Z.; Bowman, J. M. J. Chem. Theory Comput. 2010, 6, 26-34
-Nandi, A.; Qu, C.; Bowman, J. M. J. Chem. Theory Comput. 
+This is the MSA software that generates the permutationally invariant
+polynomials (PIPs) as the fitting basis for potential energy surfaces.
+Then optionally, users can continue to use this program to fit the
+potential energy surface by providing the data set.
+The detailed theory is described in the following two papers:
+[1] Xie, Z.; Bowman, J. M. J. Chem. Theory Comput. 2010, 6, 26-34
+[2] Nandi, A.; Qu, C.; Bowman, J. M. J. Chem. Theory Comput. 2019, 15,
+    2826−2835
 
 Requirements:
-To use this software, you need a
-(A) a Fortran 90 and a C++ compiler;
-(B) "dgelss" subroutine from LAPACK
-(C) Perl and Python
+To use this software to generate the PIPs, you need
+(A) Python 3, Perl, and a C++ compiler (e.g., g++);
+and if you would like to fit the potential, in addition to (A), you
+also need
+(B) Fortran compiler and "dgelss" from LAPACK (e.g., ifort and MKL)
 
 We've tested on Linux operating system, using "ifort" and "g++" as the
 Fortran and C++ compilers, and Intel MKL library for the "dgelss".
-Other compilers should also work, but you may need to use different
-flags. LAPACK is available at www.netlib.org, MKL is also freely
-available at https://software.intel.com/en-us/mkl.
+Other compilers should also work, but you may need to modify the
+Makefiles using different flags to compile.
 
 After downloading and unzipping the "MSA", the following folders and
 files should be in the package:
@@ -36,7 +39,7 @@ files should be in the package:
 
 (C) A Python script "msa.py" to fit the potential
 
-(D) A script called "reset" to clean up everything and reset the whole
+(D) A script called "reset.py" to clean up everything and reset the whole
     MSA directory to its original condition. (Be careful because all
     the output and results will be removed)
 
@@ -63,8 +66,7 @@ software.
 (1) Modify the two Makefile's, based on your compiler and LAPACK.
 
 (2) Run the Python script:
-    ./msa.py
-    (or python msa.py)
+    python msa.py
 
     (A) Input the polynomial order you would like to use for the fitting.
         In our example we use 5. The number of coefficients increases
@@ -72,15 +74,13 @@ software.
         to start with a low polynomial order.
     (B) Input the permutation group. Our example is CH4, so we use "4 1"
         here.
-    (C) Input the name of the data file, which is "geom.inp" in this
-        example.
 
-(3) The program tells you the number of coefficients and the number of
-    points in the data file. And it asks you if you would like to continue.
-    If the number of coefficients is too small (which leads to large
-    fitting error), or too large (which may cause over-fitting), you can
-    type "n" to terminate and then pick another polynomial order. If you
-    would like continue, just enter y, and the program will continue.
+(3) The program tells you the number of PIPs given the input symmetry and
+    polynomial order. And it asks you if you would like to continue to the
+    fitting. If you just need the PIPs, you can enter "n" to terminate the
+    program. If you would like to fit the PES, enter 'y' to continue. The
+    program will ask for the name of the data file, which is "geom.inp"
+    in this example.
 
 (4) The program asks you if you want to include gradients in the fitting.
     Enter "y" or "n". Note that if you choose "y", the data file must
