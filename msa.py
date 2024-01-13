@@ -78,9 +78,9 @@ print(('Given polynomial order: '+ order))
 print(('Given symmetry: '+ symmetry))
 print(('Number of PIPs is: ' + str(ncoeff) +'\n'))
 
-ans = input('Fortran code for PIPs has been generated. Would you like to proceed to the fitting? y/n\n')
+ans = input('PIPs have been written to src/basis.f90. Would you like to proceed to the fitting? y/n\n')
 if ans == 'n' or ans == "N":
-    print('Program terminated. The PIPs are written to src/basis.f90\n')
+    print('Program terminated after generating the PIPs.\n')
     quit()
 
 train_x = input('Please input the name of the fitting set file: ')
