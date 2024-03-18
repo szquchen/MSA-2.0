@@ -11,11 +11,11 @@ The detailed theory is discussed in the references listed at the end. More infor
 3. LAPACK library.
 
 # Credits
-MSA code: Zhen Xie
+Original MSA code: Zhen Xie
 
-Gradient extension: Chen Qu
+Using gradient in the fit: Chen Qu
 
-Python script: Qingfeng (Kee) Wang
+Python Wrapper: Qingfeng (Kee) Wang
 
 
 # References
