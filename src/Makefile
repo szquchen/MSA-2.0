@@ -1,23 +1,25 @@
 # using ifort and MKL
-FC = ifort -r8 -O
+FC = ifort
+FLAGS = -r8 -O
 LIBS = -qmkl=sequential # for older versions of ifort compiler, you may need to use -mkl=sequential
 
-# using gfortran and MKL
-#FC = gfortran -fdefault-real-8 -O
-#LIBS = -L${MKLROOT}/lib/intel64 -lmkl_gf_lp64 -lmkl_sequential -lmkl_core
+# using gfortran and MKL. The example below uses MKL2024; for other MKL versions, please consult https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl-link-line-advisor.html
+#FC = gfortran
+#FLAGS = -fdefault-real-8 -fdefault-double-8 -m64  -I"${MKLROOT}/include"
+#LIBS = -L${MKLROOT}/lib -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 
 %.o: %.f90
-	$(FC) -c $<
+	$(FC) $(FLAGS) -c $<
 
 OBJFIT := basis.o gradient.o fit.o
 
 OBJGET := basis.o gradient.o pes_shell.o test.o
 
 fit.x : $(OBJFIT) 
-	$(FC) -o $@ $^ $(LIBS)
+	$(FC) $(FLAGS) -o $@ $^ $(LIBS)
 
 test.x : $(OBJGET)
-	$(FC) -o $@ $^ $(LIBS)
+	$(FC) $(FLAGS) -o $@ $^ $(LIBS)
 
 clean:
 	rm -f *.o *.mod *.x	
