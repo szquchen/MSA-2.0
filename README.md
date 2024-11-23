@@ -8,7 +8,8 @@ For PIPs
 1. C++  compiler;
 2. Python3 and Perl;
    
-For  fits
+For fits
+
 4. Fortran 90   
 5. LAPACK library.
 
