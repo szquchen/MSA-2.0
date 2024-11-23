@@ -1,7 +1,7 @@
 # About MSA 2.0 and MSA 2.0.1 (latest version)
 MSA 2.0.1 is a software that generates permutationally invariant polynomials (PIPs) and gradients and optionally does a fit to electronic energies and gradients using PIPs.
 
-The detailed theory is discussed in the references listed at the end. More information can be found in the Tutorial.txt file and at https://scholarblogs.emory.edu/bowman/msa.
+The detailed theory is discussed in the references listed at the end. More information and a tutorial video can be found in the Tutorial.txt file and at https://scholarblogs.emory.edu/bowman/msa.
 
 # Prerequisites
 For PIPs
