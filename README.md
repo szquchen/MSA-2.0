@@ -7,9 +7,10 @@ The detailed theory is discussed in the references listed at the end. More infor
 For PIPs
 1. C++  compiler;
 2. Python3 and Perl;
-For PIP fits
-3. Fortran 90   
-4. LAPACK library.
+   
+For  fits
+4. Fortran 90   
+5. LAPACK library.
 
 # Credits
 Original MSA code: Zhen Xie
