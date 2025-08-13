@@ -36,19 +36,26 @@ if returncode != 0:
     print("Please check the output above, maybe try running reset, and try again!\n")
     quit()
 
-print("Generating the fitting bases...")
-print("This might take hours for larger systems, especially if they have a lot of permutational symmetry.")
-returncode = cl('''
-cd src
-./msa '''+ arg +  '''
-'''
-)
-if returncode != 0:
-    print("Failed to generate fitting bases!\n")
-    print("Please check the output above, maybe try running reset, and try again!\n")
-    quit()
-
-
+path = "src/MOL_"
+args = arg.split()
+for i in range(1,len(args)):
+    path = path + args[i] + "_"
+path = path + args[0] + ".POLY"
+if not os.path.exists(path):
+    print("Generating the fitting bases...")
+    print("This might take hours for larger systems, especially if they have a lot of permutational symmetry.")
+    returncode = cl('''
+    cd src
+    ./msa '''+ arg +  '''
+    '''
+    )
+    if returncode != 0:
+        print("Failed to generate fitting bases!\n")
+        print("Please check the output above, maybe try running reset, and try again!\n")
+        quit()
+else:
+    print("Basis already been generated. Proceed to the next step...")
+    
 print("Generating the Fortran source code from the fitting bases...\n")
 returncode = cl('''
 cd src
